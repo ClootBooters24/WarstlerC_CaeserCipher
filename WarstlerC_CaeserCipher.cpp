@@ -1,62 +1,124 @@
-//------------------------------------------------------------
-// Purpose: Program that encodes and/or decodes messages using two variations of "Caesar cipher" algorithm 
-// Author: Corey Rodgers
-//
-//------------------------------------------------------------
+// WarstlerC_CSCE2004_Project3.cpp : This file contains the 'main' function. Program execution begins and ends there.
+
 #include <iostream>
+#include <string>
 using namespace std;
+
+//Function to encrypt the text
+string encrypt(string message, int shiftKey)
+{
+	string result = "";
+
+	//Traverse the text
+	for (int i = 0; i < message.length(); i++)
+	{
+		//Encrypt uppercase
+		if (isupper(message[i]))
+		{
+			//Equation to convert characters ASCII
+			result += char(int(message[i] + shiftKey - 65) % 26 + 65);
+		}
+
+		//Encrypt lowercase
+		else if (islower(message[i]))
+		{
+			//Equation to convert characters ASCII
+			result += char(int(message[i] + shiftKey - 97) % 26 + 97);
+		}
+
+		//Else to append a space into the message
+		else
+		{
+			result.append(" ");
+		}
+
+		shiftKey++;
+	}
+
+	return result;
+}
+
+//Function to decrypt the text
+string decrypt(string message, int shiftKey)
+{
+	string result = "";
+
+	//Shift the key over 26 to recenter the combination
+	shiftKey = 26 - shiftKey;
+
+	//Traverse the text
+	for (int i = 0; i < message.length(); i++)
+	{
+		//Dencrypt uppercase
+		if (isupper(message[i]))
+		{
+			//Equation to convert characters ASCII
+			result += char(int(message[i] + shiftKey - 65) % 26 + 65);
+		}
+
+		//Decrypt lowercase
+		else if (islower(message[i]))
+		{
+			//Equation to convert characters ASCII
+			result += char(int(message[i] + shiftKey - 97) % 26 + 97);
+		}
+
+		//Else to append a space into the message
+		else
+		{
+			result.append(" ");
+		}
+
+		shiftKey = shiftKey - 1;
+	}
+
+	return result;
+}
+
 
 int main()
 {
-    //Local variable declarations
-    int choice, i;
-    int shift = 3;
-    char input[100];
+	string message;
+	int shiftKey, choice;
 
-    //Introduce the cipher
-    cout << "Welcome to Corey's Caesar cipher" << endl;
+	//Fix
+	//String cannot have multiple lines
 
-    //Allow user to choose to encrypt or decrypt 
-    cout << "Would you like to 1. encode or 2. decode: ";
-    cin >> choice;
-
-    if (choice == 1)
-    {
-        char ch = ' ';
-        cout << "Enter message followed by a period on a seperate line with no spaces: " << endl;
-        cin.getline(input, 100);
-
-        for (i = 0; input[i] != '\0'; i++)
-        {
-            ch = input[i];
-            if (isupper(input[i]))
-            {
-                ch = ch + shift;
-            }
-            if (islower(input[i]))
-            {
-                ch = ch - 'z' + 'a' - 1;
-            }
-            input[i] = ch;
-        }
-    }
-    cout << input;
-
-/*    if (choice == 2)
-    {
-        cout << "Enter message followed by a period on a seperate line with no spaces: " << endl;
-        cin >> input;
-        while (input < 'a' && input < 'z')
-        {
-            for (int i = 0; i < input; i++)
-                output += ((input + shift + 65) % 26);
-        }
-    }
-
-    cout << output;
+	//Take the message as input
+	//Exit with -1
+	cout << "Enter the message or leave blank to exit the program: ";
+	getline(cin, message);
 
 
+	//If -1, exit program
+	if (message == "")
+	{
+		cout << "Exiting program...";
+		return 0;
+	}
 
-    cout << output;
-    */
+	//Get the shift key
+	cout << "Enter the key: ";
+	cin >> shiftKey;
+
+	//User chooses whether to encrypt or decrypt
+	cout << "Enter your choice \n1. Encryption \n2. Decryption \n";
+	cout << "Your choice: ";
+	cin >> choice;
+
+	if (choice == 1)
+	{
+		cout << "Cipher: " << encrypt(message, shiftKey);
+
+	}
+
+	else if (choice == 2)
+	{
+		cout << "Message: " << decrypt(message, shiftKey);
+	}
+
+	else
+	{
+		return 0;
+	}
 }
